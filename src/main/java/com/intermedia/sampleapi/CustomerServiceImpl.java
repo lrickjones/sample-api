@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import javax.transaction.Transactional;
+
 @Service
-//@Transactional
+@Transactional
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
@@ -20,5 +22,5 @@ public class CustomerServiceImpl implements CustomerService {
     public Mono<Customer> get(long id) {
         return Mono.just(customerRepository.findById(id).orElse(null));
     }
-    //...
+
 }
