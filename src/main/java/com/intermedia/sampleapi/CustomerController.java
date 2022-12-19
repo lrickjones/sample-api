@@ -25,4 +25,11 @@ public class CustomerController {
 
         return Mono.just(customer);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable long id) {
+        customerService.delete(id);
+    }
+
 }

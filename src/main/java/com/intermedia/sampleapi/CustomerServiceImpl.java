@@ -23,4 +23,7 @@ public class CustomerServiceImpl implements CustomerService {
         return Mono.just(customerRepository.findById(id).orElse(null));
     }
 
+    @Override
+    public void delete(long id) { customerRepository.deleteById(id);}
+
 }

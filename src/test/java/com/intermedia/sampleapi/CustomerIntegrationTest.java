@@ -59,4 +59,22 @@ public class CustomerIntegrationTest {
                 .jsonPath("$.firstName")
                 .isEqualTo(newCustomer.getFirstName());
     }
+
+    @Test
+    public void deleteCustomerFromAPI() {
+        Customer nextCustomer = customerRepository.save(newCustomer);
+        webTestClient.delete().uri("/customers/{id}", nextCustomer.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    public void deleteCustomerNotPresentFromAPI() {
+        Customer nextCustomer = customerRepository.save(newCustomer);
+        webTestClient.delete().uri("/customers/20")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().is5xxServerError();
+    }
 }
