@@ -31,7 +31,7 @@ public class CustomerIntegrationTest {
     @Test
     public void getCustomerFromDb() {
         Customer nextCustomer = customerRepository.save(newCustomer);
-        Customer customer = customerRepository.findById(nextCustomer.getId()).orElse(null);
+        Customer customer = customerRepository.findById(nextCustomer.getCustomer_id()).orElse(null);
         assertNotNull(customer);
         assertEquals(customer.getFirstName(), (nextCustomer.getFirstName()));
     }
@@ -51,7 +51,7 @@ public class CustomerIntegrationTest {
     @Test
     public void getCustomerFromAPI() {
         Customer nextCustomer = customerRepository.save(newCustomer);
-        webTestClient.get().uri("/customers/{id}", nextCustomer.getId())
+        webTestClient.get().uri("/customers/{id}", nextCustomer.getCustomer_id())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -63,7 +63,7 @@ public class CustomerIntegrationTest {
     @Test
     public void deleteCustomerFromAPI() {
         Customer nextCustomer = customerRepository.save(newCustomer);
-        webTestClient.delete().uri("/customers/{id}", nextCustomer.getId())
+        webTestClient.delete().uri("/customers/{id}", nextCustomer.getCustomer_id())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk();
