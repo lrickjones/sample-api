@@ -21,17 +21,17 @@ import java.util.Set;
 public class Service {    @Id
     @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long service_id;
 
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
-            name = "CUSTOMER_SERVICES",
+            name = "CUSTOMER_SERVICE",
             joinColumns = {
-                    @JoinColumn(name = "service.id")
+                    @JoinColumn(name = "service_id")
             },
             inverseJoinColumns = {
-                    @JoinColumn(name = "customer.id")
+                    @JoinColumn(name = "customer_id")
             }
     )
     Set<Customer> customers = new HashSet <>();
@@ -42,5 +42,10 @@ public class Service {    @Id
     private String description;
     @Column(name="PRICE")
     private Integer price;
+
+    public void addCustomer(Customer customer) {
+        if (customers == null) customers = new HashSet<>();
+        customers.add(customer);
+    }
 
 }

@@ -6,4 +6,4 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {}
+public interface ServiceRepository extends JpaRepository<Service, Long> {}

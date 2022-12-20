@@ -3,56 +3,69 @@ package com.intermedia.sampleapi;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.intermedia.sampleapi.util.CustomerData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
-import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Autowired
-    private CustomerService customerService;
+    private ServiceRepository serviceRepository;
 
-    @PostConstruct
-    public void init() throws JsonProcessingException {
-        CustomerData.init(customerService);
+    private void init() throws JsonProcessingException {
+       CustomerData.init(customerRepository, serviceRepository);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Customer> save(@RequestBody Customer customer) {
-        return customerService.save(customer);
+    public Customer save(@RequestBody Customer customer) {
+        return customerRepository.save(customer);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<Customer> get(@PathVariable long id) {
-        Customer customer = customerService.get(id).block();
-
-        return Mono.just(customer);
+    @Transactional
+    public Customer get(@PathVariable long id) {
+        return customerRepository.findById(id).orElse(null);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Mono<List<Customer>> getAll() {
-        List<Customer> customers = customerService.getAll().block();
-
-        return Mono.just(customers);
+    public List<Customer> getAll() {
+        return customerRepository.findAll();
     }
 
     @GetMapping("/{id}/services")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<List<Service>> getServices(@PathVariable long id) {
-        Customer customer = customerService.get(id).block();
+    @Transactional
+    public List<Service> getServices(@PathVariable long id) {
+        Customer customer = customerRepository.findById(id).orElse(null);
+        if (customer ==  null) {
+            return null;
+        }
         List<Service> result = new ArrayList<>();
         for (Service s : customer.getServices()) {
             result.add(s);
         }
-        return Mono.just(result);
+        return result;
+    }
+
+    @EventListener
+    @Transactional
+    public void appReady(ApplicationReadyEvent event) {
+        try {
+            this.init();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }

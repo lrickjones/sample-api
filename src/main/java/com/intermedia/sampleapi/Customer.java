@@ -23,7 +23,7 @@ public class Customer {
     @Id
     @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long customer_id;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "customers", cascade = { CascadeType.ALL})
@@ -35,4 +35,9 @@ public class Customer {
     private String lastName;
     @Column(name="EMAIL")
     private String email;
+
+    public void addService(Service service) {
+        if (services == null) services = new HashSet<>();
+        services.add(service);
+    }
 }
