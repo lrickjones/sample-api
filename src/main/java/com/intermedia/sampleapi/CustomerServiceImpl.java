@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -21,6 +22,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Mono<Customer> get(long id) {
         return Mono.just(customerRepository.findById(id).orElse(null));
+    }
+
+    @Override
+    public Mono<List<Customer>> getAll() {
+        return Mono.just(customerRepository.findAll());
     }
 
 }
