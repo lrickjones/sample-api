@@ -40,18 +40,14 @@ public class CustomerData {
             Customer customer = mapper.readValue(customers[i], Customer.class);
             // All customers have wash
             customer.addService(wash);
-            wash.addCustomer(customer);
             // Half have wax
             if (i%2==0) {
                 customer.addService(wax);
-                wax.addCustomer(customer);
             }
             // about 1/3 have detail
             if (i%3==0) {
                 customer.addService(detail);
-                detail.addCustomer(customer);
             }
-            //session.persist(customer);
             customerRepository.save(customer);
         }
     }

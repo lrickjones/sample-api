@@ -6,7 +6,9 @@ import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -23,6 +25,8 @@ public class Service {    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long service_id;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -46,6 +50,26 @@ public class Service {    @Id
     public void addCustomer(Customer customer) {
         if (customers == null) customers = new HashSet<>();
         customers.add(customer);
+    }
+
+    public void removeCustomer(Customer customer) {
+        if (customers == null) return;
+        customers.remove(customer);
+    }
+
+    public List<Customer> getCustomers() {
+        List<Customer> result = new ArrayList<>();
+        if (customers != null) {
+            for (Customer customer : customers) {
+                result.add(customer);
+            }
+        }
+        return result;
+    }
+
+    public int customersSize() {
+        if (customers == null) return 0;
+        return customers.size();
     }
 
 }
