@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -52,11 +51,7 @@ public class CustomerController {
         if (customer ==  null) {
             return null;
         }
-        List<Service> result = new ArrayList<>();
-        for (Service s : customer.getServices()) {
-            result.add(s);
-        }
-        return result;
+        return customer.getServices();
     }
 
     @EventListener

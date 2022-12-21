@@ -7,7 +7,9 @@ import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -25,6 +27,8 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long customer_id;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @JsonIgnore
     @ManyToMany(mappedBy = "customers", cascade = { CascadeType.ALL})
     private Set<Service> services = new HashSet<>();
@@ -39,5 +43,27 @@ public class Customer {
     public void addService(Service service) {
         if (services == null) services = new HashSet<>();
         services.add(service);
+        service.addCustomer(this);
+    }
+
+    public void removeService(Service service) {
+        if (services == null) return;
+        services.remove(service);
+        service.removeCustomer(this);
+    }
+
+    public List<Service> getServices() {
+        List<Service> result = new ArrayList<>();
+        if (services != null) {
+            for (Service service : services) {
+                result.add(service);
+            }
+        }
+        return result;
+    }
+
+    public int serviceSize() {
+        if (services == null) return 0;
+        return services.size();
     }
 }
