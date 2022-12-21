@@ -7,18 +7,16 @@ import com.intermedia.sampleapi.CustomerRepository;
 import com.intermedia.sampleapi.Service;
 import com.intermedia.sampleapi.ServiceRepository;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerData {
 
-    private static String[] customers = {"{\"firstName\":\"Customer\", \"lastName\":\"one\", \"email\":\"one@yahoo.com\"}",
+    private static final String[] customers = {"{\"firstName\":\"Customer\", \"lastName\":\"one\", \"email\":\"one@yahoo.com\"}",
                                         "{\"firstName\":\"Customer\", \"lastName\":\"two\", \"email\":\"two@yahoo.com\"}",
                                         "{\"firstName\":\"Customer\", \"lastName\":\"three\", \"email\":\"three@msn.com\"}",
                                         "{\"firstName\":\"Customer\", \"lastName\":\"four\", \"email\":\"four@msn.com\"}",
                                         "{\"firstName\":\"Customer\", \"lastName\":\"five\", \"email\":\"five@yahoo.com\"}"};
-    private static String[] services = {"{\"name\":\"wash\", \"description\":\"Exterior wash\", \"price\":5}",
+    private static final String[] services = {"{\"name\":\"wash\", \"description\":\"Exterior wash\", \"price\":5}",
                                         "{\"name\":\"wax\", \"description\":\"Hand wax exterior\", \"price\":8}",
                                         "{\"name\":\"detail\", \"description\":\"Vacuum inside and clean surfaces\", \"price\":10}"};
     public static void init(CustomerRepository customerRepository, ServiceRepository serviceRepository) throws JsonProcessingException {
@@ -32,7 +30,7 @@ public class CustomerData {
         List<Service> serviceList = serviceRepository.findAll();
         assert(serviceList != null);
         assert(serviceList.size() == services.length);
-        Service wash = serviceList.stream().findFirst().filter(s -> s.getName().toLowerCase().equals("wash")).orElse(null);
+        Service wash = serviceList.stream().findFirst().filter(s -> s.getName().equalsIgnoreCase("wash")).orElse(null);
         Service wax = serviceList.get(1); //serviceList.stream().findFirst().filter(s -> s.getName().toLowerCase().contains("wax")).orElse(null);
         Service detail = serviceList.get(2); //serviceList.stream().findFirst().filter(s -> s.getName().toLowerCase().contains("detail")).orElse(null);
 

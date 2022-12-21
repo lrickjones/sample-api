@@ -55,9 +55,7 @@ public class Customer {
     public List<Service> getServices() {
         List<Service> result = new ArrayList<>();
         if (services != null) {
-            for (Service service : services) {
-                result.add(service);
-            }
+            result.addAll(services);
         }
         return result;
     }

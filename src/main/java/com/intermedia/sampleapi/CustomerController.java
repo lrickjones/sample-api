@@ -78,7 +78,6 @@ public class CustomerController {
         for (Service service : customer.getServices()) {
             customer.removeService(service);
         }
-        //customerRepository.saveAndFlush(customer);
         customerRepository.delete(customer);
     }
 
