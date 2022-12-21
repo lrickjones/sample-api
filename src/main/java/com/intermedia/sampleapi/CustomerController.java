@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -69,19 +70,16 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    //@Transactional
+    @Transactional
     public void delete(@PathVariable long id) {
         Customer customer = customerRepository.findById(id).orElse(null);
         if (customer == null) throw new EntityNotFoundException();
 
-        if (customer.getServices() != null) {
-            Service[] services = (Service[]) customer.getServices().toArray();
-            for (Service service : services) {
-                customer.getServices().remove(service);
-            }
+        for (Service service : customer.getServices()) {
+            customer.removeService(service);
         }
-        customerRepository.saveAndFlush(customer);
-        //customerRepository.delete(customer);
+        //customerRepository.saveAndFlush(customer);
+        customerRepository.delete(customer);
     }
 
     @GetMapping("/revenue")
