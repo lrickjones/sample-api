@@ -26,7 +26,7 @@ public class Customer {
     private long customer_id;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "customers", cascade = { CascadeType.ALL})
+    @ManyToMany(mappedBy = "customers")
     private Set<Service> services = new HashSet<>();
 
     @Column(name="FIRSTNAME")

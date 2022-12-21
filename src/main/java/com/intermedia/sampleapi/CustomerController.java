@@ -10,6 +10,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,8 +74,19 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    //@Transactional
     public void delete(@PathVariable long id) {
-        customerRepository.deleteById(id);
+        Customer customer = customerRepository.findById(id).orElse(null);
+        if (customer == null) throw new EntityNotFoundException();
+
+        if (customer.getServices() != null) {
+            Service[] services = (Service[]) customer.getServices().toArray();
+            for (Service service : services) {
+                customer.getServices().remove(service);
+            }
+        }
+        customerRepository.saveAndFlush(customer);
+        //customerRepository.delete(customer);
     }
 
     @GetMapping("/revenue")
@@ -102,7 +114,6 @@ public class CustomerController {
 
     @GetMapping("/email/provider")
     @ResponseStatus(HttpStatus.OK)
-    @Transactional
     public List<Customer> getByEmailProvider(@RequestParam String provider) {
         Customer customer = Customer.builder().email(provider).build();
         ExampleMatcher matcher = ExampleMatcher.matchingAny().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);

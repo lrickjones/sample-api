@@ -24,9 +24,9 @@ public class Service {    @Id
     private long service_id;
 
     @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany
     @JoinTable(
-            name = "CUSTOMER_SERVICE",
+            name = "SERVICE_CUSTOMER",
             joinColumns = {
                     @JoinColumn(name = "service_id")
             },

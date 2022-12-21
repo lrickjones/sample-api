@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -62,11 +64,12 @@ public class CustomerIntegrationTest {
 
     @Test
     public void deleteCustomerFromAPI() {
-        Customer nextCustomer = customerRepository.save(newCustomer);
-        webTestClient.delete().uri("/customers/{id}", nextCustomer.getCustomer_id())
+        webTestClient.delete().uri("/customers/{id}",1)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk();
+        List<Customer> customerList = customerRepository.findAll();
+        assertEquals(4, customerList.size());
     }
 
     @Test
