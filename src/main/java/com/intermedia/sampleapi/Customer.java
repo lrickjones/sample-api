@@ -30,7 +30,7 @@ public class Customer {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     @JsonIgnore
-    @ManyToMany(mappedBy = "customers", cascade = { CascadeType.ALL})
+    @ManyToMany(mappedBy = "customers")
     private Set<Service> services = new HashSet<>();
 
     @Column(name="FIRSTNAME")
@@ -55,9 +55,7 @@ public class Customer {
     public List<Service> getServices() {
         List<Service> result = new ArrayList<>();
         if (services != null) {
-            for (Service service : services) {
-                result.add(service);
-            }
+            result.addAll(services);
         }
         return result;
     }

@@ -28,7 +28,7 @@ public class Service {    @Id
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany
     @JoinTable(
             name = "CUSTOMER_SERVICE",
             joinColumns = {
@@ -60,9 +60,7 @@ public class Service {    @Id
     public List<Customer> getCustomers() {
         List<Customer> result = new ArrayList<>();
         if (customers != null) {
-            for (Customer customer : customers) {
-                result.add(customer);
-            }
+            result.addAll(customers);
         }
         return result;
     }
