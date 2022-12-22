@@ -8,7 +8,7 @@ mvn clean package
 java -jar target/sample-api-0.0.1-SNAPSHOT.jar
 
 ## Test From Browser
-http://localhost:8080/swagger-ui
+http://localhost:8080/swagger-ui/
 
 ## Test From Curl
 
